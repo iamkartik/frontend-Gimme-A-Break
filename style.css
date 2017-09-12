@@ -1,0 +1,43 @@
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 30vh;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background: #4a4675;
+    color: white;
+    font-size: 22px;
+}
+.set__time{
+    display: flex;
+    padding: 10px;
+}
+.set__time *{
+    flex: 1;
+}
+
+.form input[type="text"]{
+    max-width: 100px;
+    margin-left: 20px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid white;
+    color: white;
+}
+
+.set__time input:focus{
+	border: 0;
+	border-color: transparent;
+	outline: none;
+	border-bottom: 1px solid white;
+}
+.form button ,.settings button{
+    min-width: 100px;
+    min-height: 40px;
+    margin: 10px auto;
+   	display: block;
+    background: none;
+    border:1px solid white;
+    color: white;
+}
