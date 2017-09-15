@@ -13,7 +13,7 @@ body{
     display: flex;
     padding: 10px;
 }
-.set__time *{
+.set__time label{
     flex: 1;
 }
 
@@ -32,7 +32,7 @@ body{
 	outline: none;
 	border-bottom: 1px solid white;
 }
-.form button ,.settings button{
+#start ,.settings button{
     min-width: 100px;
     min-height: 40px;
     margin: 10px auto;
@@ -40,4 +40,29 @@ body{
     background: none;
     border:1px solid white;
     color: white;
+}
+.input-radio{
+    -webkit-appearance: none;
+    width: 25px;
+    height:25px;
+    cursor: pointer;
+    outline:none;
+    border:none;
+    background: #cbd1d8;
+    border-radius: 50%;
+}
+.input-radio:checked::before{
+    width: 25px;
+    height:25px;
+    content: '✔';
+    text-align: center;
+    line-height: 25px;
+    position: absolute;
+    display: inline-block;
+    font-size: 25px;
+    color:#544e4e;
+}
+.error{
+    color: red;
+    font-size: 18px;
 }

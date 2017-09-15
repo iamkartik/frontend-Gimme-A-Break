@@ -8,28 +8,31 @@
         </head>
         <body>
             <div class="form">
-                <form>
+                <form id="timeForm">
                     <div class="set__time">
                         <label for="10min">10 min</label>
-                        <input name="time" type="radio" id="10min" value="10">
+                        <input name="time" class="input-radio" type="radio" id="10min" value="10">
                     </div>
                     <div class="set__time">    
                         <label for="20min">20 min</label>
-                        <input name="time" type="radio" id="20min" value="20">
+                        <input name="time" class="input-radio" type="radio" id="20min" value="20">
                     </div>
                     <div class="set__time">    
                         <label for="30min">30 min</label>
-                        <input name="time" type="radio" id="30min" value="30">
+                        <input name="time" class="input-radio" type="radio" id="30min" value="30">
                     </div>
                     <div class="set__time">    
                         <label for="custom">Custom</label>
-                        <input type="text" id="custom" placeholder="Time in min">
+                        <input name="custom" type="text" id="custom" placeholder="Time in min">
                     </div>    
-                    <button>Start</button>
+                    <input type="submit" id="start" value="Start">
                 </form>    
             </div>
+            <div class="timer"></div>
             <div class="settings">
                 <button>Settings</button>
             </div>
+            <p class="error"></p>
+            <script src="popup.js"></script>
         </body>
     </html>
