@@ -12,7 +12,6 @@ chrome.alarms.onAlarm.addListener(function(alarm){
 function showMessage(){
     chrome.notifications.create("remind",{
         type: 'basic',
-        iconUrl: 'icon_128.png',
         title: 'Gimme a Break !!!',
         message: 'Time to take a break !!'
      },function(notificationId) {});
