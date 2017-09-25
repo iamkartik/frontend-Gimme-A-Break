@@ -4,6 +4,7 @@ const custom = document.querySelector('#custom');
 const form = document.querySelector('#timeForm');
 const error = document.querySelector('.error');
 const timer = document.querySelector('.timer');
+const clear = document.querySelector('#clear');
 
 function uncheck(){
     inputs.forEach(input=>input.checked=false);
@@ -47,3 +48,4 @@ start.addEventListener('click',(e)=>{
     }
 });
 
+clear.addEventListener('click',()=>chrome.alarms.clearAll(function(alarm){}));

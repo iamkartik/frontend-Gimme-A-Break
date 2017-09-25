@@ -1,5 +1,4 @@
 const value = document.querySelector('#value');
-console.log('ran');
 chrome.runtime.onMessage.addListener((request,sender,sendResponse)=>{
     chrome.alarms.clearAll(function(alarm){});
     chrome.alarms.create("myalarm", {periodInMinutes:request.value});
@@ -17,3 +16,4 @@ function showMessage(){
         message: 'Time to take a break !!'
      },function(notificationId) {});
 }
+
