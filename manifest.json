@@ -10,5 +10,5 @@
         "scripts":["timer.js"],
         "persistence":false
     },
-    "permissions": ["activeTab","alarms","notifications"]
+    "permissions": ["activeTab","alarms","notifications","storage"]
 }

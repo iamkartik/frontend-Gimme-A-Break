@@ -38,7 +38,7 @@ start.addEventListener('click',(e)=>{
                 // getting the final time in response
                 chrome.runtime.sendMessage({value: timeInMin},function(response){
                     calculateTime(response.finalTime);
-                    //chrome.browserAction.setPopup({popup:'timer.html'});
+                    chrome.storage.sync.set({finalTime:response.finalTime},()=>{});
                 });
                 
             }else{
@@ -55,17 +55,21 @@ start.addEventListener('click',(e)=>{
 });
 // button to clear the alarms
 clear.addEventListener('click',()=>{
+    timer.style.display = 'none';
     chrome.alarms.clearAll(function(alarm){});
+    chrome.storage.sync.remove(['finalTime'],(items)=>{});
     clearInterval(countdown);
+    form.style.display = 'block';
 });
 
 // calculate the remaining time to display
 function calculateTime(finalTime){
     // removing the form
     form.style.display = 'none';
-    displayTimer = true;
+    timer.style.display = 'block';
     // the interval is cleared everytime a new alarm is set
     clearInterval(countdown);
+    displayTime(Math.round((finalTime - Date.now())/1000));
     // setting the interval to run after every 1 sec
     countdown = setInterval(()=>{
         // secondsLeft by subtracting final time from current time , taking the round 
@@ -84,10 +88,42 @@ function calculateTime(finalTime){
 function displayTime(seconds){
     const minutes = Math.floor(seconds/60);
     const sec = seconds % 60; 
-    const time = `${minutes}:${sec}`;
+    const time = `${minutes}:${sec<10?'0':''}${sec}`;
     timer.innerHTML = time;
 }
 
 window.addEventListener('load',()=>{
-    console.log('hello');
+    chrome.storage.sync.get(['finalTime'],(time)=>{
+        /*console.log(time.finalTime);*/
+        if(time.finalTime){
+            // show the timer
+            form.style.display = 'none';
+            calculateTime(time.finalTime);
+        }else{
+            // show the form
+        }
+    });
 });
+
+/*
+// on any alarm catch the event
+chrome.alarms.onAlarm.addListener(function(alarm){
+    showMessage();
+});
+
+// show the desired message
+function showMessage(){
+    timer.style.display = 'none';
+    chrome.notifications.create('remind',{
+        type: 'basic',
+        iconUrl: 'icon_128.png',
+        title: 'Gimme a Break !!!',
+        message: 'Time to take a break !!'
+     },function(notificationId) {});
+     // clear the alarms
+    chrome.alarms.clearAll(function(alarm){});
+    chrome.storage.sync.remove(['finalTime'],(items)=>{});
+    
+    form.style.display='block';
+    
+}*/

@@ -30,5 +30,16 @@ function showMessage(){
      },function(notificationId) {});
      // clear the alarms
     chrome.alarms.clearAll(function(alarm){});
+    chrome.storage.sync.remove(['finalTime'],(items)=>{});
 }
 
+// ading the onclick to change the popup html
+chrome.browserAction.onClicked.addListener(()=>{
+    const alarmSet = chrome.alarms.get('myalarm',()=>{});
+    console.log("hello");
+   /* if(alarmSet){
+        chrome.browserAction.setPopup({popup:'timer.html'});
+    }else{
+        chrome.browserAction.setPopup({popup:'index.html'})
+    }*/
+});
