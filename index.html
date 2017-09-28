@@ -24,13 +24,20 @@
                     <div class="set__time">    
                         <label for="custom">Custom</label>
                         <input name="custom" type="text" id="custom" placeholder="Time in min">
+                    </div>
+                    <div class="set__time">    
+                        <label for="repeat">Repeat</label>
+                        <label  class="switch">
+                            <input name="repeat" type="checkbox">
+                            <span class="slider round"></span>
+                        </label>                        
                     </div>    
                     <input type="submit" id="start" value="Start">
                 </form>    
             </div>
             <div class="timer">
                 <span id="time"></span>
-                <button id="clear">Clear All Alarms</button>
+                <button id="clear">Reset</button>
             </div>
             <div class="settings">
                 <button>Settings</button>

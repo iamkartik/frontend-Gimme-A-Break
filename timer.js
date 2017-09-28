@@ -15,7 +15,7 @@ chrome.runtime.onMessage.addListener((request,sender,sendResponse)=>{
     return true; 
 });
 
-// on any alarm catch the event
+// on any alarm catch the event and display a custom or predefined message
 chrome.alarms.onAlarm.addListener(function(alarm){
     showMessage();
 });
@@ -28,18 +28,14 @@ function showMessage(){
         title: 'Gimme a Break !!!',
         message: 'Time to take a break !!'
      },function(notificationId) {});
-     // clear the alarms
+     // clear the alarms 
     chrome.alarms.clearAll(function(alarm){});
+    // remove finalTime field from the storage
     chrome.storage.sync.remove(['finalTime'],(items)=>{});
+    /* chrome.alarms.get('myalarm',(alarm)=>{
+        const finalTime=alarm.scheduledTime;
+        chrome.storage.sync.set({finalTime:finalTime},()=>{});
+     });*/
 }
 
-// ading the onclick to change the popup html
-chrome.browserAction.onClicked.addListener(()=>{
-    const alarmSet = chrome.alarms.get('myalarm',()=>{});
-    console.log("hello");
-   /* if(alarmSet){
-        chrome.browserAction.setPopup({popup:'timer.html'});
-    }else{
-        chrome.browserAction.setPopup({popup:'index.html'})
-    }*/
-});
+

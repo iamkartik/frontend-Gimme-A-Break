@@ -32,7 +32,7 @@ body{
 	outline: none;
 	border-bottom: 1px solid white;
 }
-#start ,.settings button{
+#start,#clear,.settings button{
     min-width: 100px;
     min-height: 40px;
     margin: 10px auto;
@@ -65,4 +65,11 @@ body{
 .error{
     color: red;
     font-size: 18px;
+}
+.timer{
+    display: flex;
+    align-items: center;
+}
+#time{
+    font-size: 50px;
 }

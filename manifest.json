@@ -10,5 +10,9 @@
         "scripts":["timer.js"],
         "persistence":false
     },
+    "options_ui":{
+        "page":"options.html",
+        "chrome_style":true
+    },
     "permissions": ["activeTab","alarms","notifications","storage"]
 }
