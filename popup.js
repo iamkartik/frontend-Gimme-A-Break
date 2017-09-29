@@ -16,6 +16,10 @@ const timerDisplay = document.querySelector('#time');
 const clear = document.querySelector('#clear');
 // to open the settings
 const options = document.querySelector('.settings button');
+// toggle repeat checkbox
+const repeat = document.querySelector('.switch input');
+// break input only shown if user wants to repeat a break and uses repeat toggle
+const breakTime = document.querySelector('.break');
 // countdown button to set the setInterval for displaying countdown
 let countdown;
 
@@ -170,4 +174,9 @@ chrome.alarms.onAlarm.addListener((alarm)=>{
                     calculateTime(response.finalTime);
                     chrome.storage.sync.set({finalTime:response.finalTime},()=>{});
     });*/
+});
+
+repeat.addEventListener('click',function(){
+    const toggleBreak = this.checked?'inline-flex':'none';
+    breakTime.style.display = toggleBreak;
 });
