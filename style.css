@@ -124,3 +124,4 @@ input:checked + .slider::before{
 .slider.round::before{
     border-radius: 50%;
 }
+/* CSS for toggle switch ends*/

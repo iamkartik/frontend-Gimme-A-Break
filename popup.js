@@ -29,6 +29,12 @@ custom.addEventListener('focus',()=>{
     uncheck();
 });
 
+// reset the custom input in case a radio button is selected 
+// earlier the custom value was always taken even in case the radio was checked after custom input
+inputs.forEach(input => input.addEventListener('click',()=>{
+    custom.value = null;
+}));
+
 // perform sanity checks to set the alarm
 start.addEventListener('click',(e)=>{
     e.preventDefault();
