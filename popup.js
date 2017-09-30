@@ -20,6 +20,8 @@ const options = document.querySelector('.settings button');
 const repeat = document.querySelector('.switch input');
 // break input only shown if user wants to repeat a break and uses repeat toggle
 const breakTime = document.querySelector('.break');
+// duration of the break selected
+const breakDuration = document.querySelector('#breakTime');
 // countdown button to set the setInterval for displaying countdown
 let countdown;
 
@@ -52,31 +54,36 @@ start.addEventListener('click',(e)=>{
     }else{
         time=inputs.find(input=>input.checked);
     }
-    // if there is checked radio/custom time
-    if(time){
-        // parse time to get the value in int
-        const timeInMin = parseInt(time.value);
-        // if parse successful
-        if(timeInMin){
-            // check if the time in custom is valid , less than a day 
-            if(timeInMin>0&&timeInMin<=1440){
-                // send the message to background to set an alarm
-                // getting the final time in response
-                chrome.runtime.sendMessage({value: timeInMin},function(response){
-                    calculateTime(response.finalTime);
-                    chrome.storage.sync.set({finalTime:response.finalTime},()=>{});
-                });
-                
-            }else{
-               error.innerHTML='Alarm time cannot be less than 0 or more than a day (1400).';
-            }            
-        }else{
-            // custom time cannot be alphabet
-           error.innerHTML='The time should be a number.';
-        }
+    // validate the time to check if there is any error 
+    const timeError = validateTime(time);
+    // error found display it 
+    if(timeError){
+        error.innerHTML=timeError;
     }else{
-        // error out to provide a time
-       error.innerHTML='Please select a time intrval or add a custom time period.';
+        // parse the time to get value
+        const timeInMin = parseInt(time.value);
+        // check if there is repeat checked 
+        // if checked validate the break time 
+        if(repeat.checked){
+            // validate the breakDuration time 
+            const breakDurationError = validateTime(breakDuration);
+            if(breakDurationError){
+                error.innerHTML=`Break Time :: ${breakDurationError}`;
+            }else{
+                // set a repeated alarm
+                const breakTimeDuration = parseInt(breakDuration.value);
+                
+            }
+                            
+        }else{
+            // no repeat only set the alarm for one time 
+            // send the message to background to set an alarm
+            // getting the final time in response
+            chrome.runtime.sendMessage({value: timeInMin},function(response){
+                calculateTime(response.finalTime);
+                chrome.storage.sync.set({finalTime:response.finalTime},()=>{});
+            });
+        }
     }
 });
 
@@ -180,3 +187,28 @@ repeat.addEventListener('click',function(){
     const toggleBreak = this.checked?'inline-flex':'none';
     breakTime.style.display = toggleBreak;
 });
+
+function validateTime(time){
+    let err;
+    // if there is checked radio/custom time
+    if(time){
+        // parse time to get the value in int
+        const timeInMin = parseInt(time.value);
+        // if parse successful
+        if(timeInMin){
+            // check if the time in custom is valid , less than a day 
+            if(timeInMin>0&&timeInMin<=1440){
+                return;
+            }else{
+               err='Alarm time cannot be less than 0 or more than a day (1400 min).';
+            }            
+        }else{
+            // custom time cannot be alphabet
+           err='The time should be a number.';
+        }
+    }else{
+        // error out to provide a time
+       err='Please select a time intrval or add a custom time period.';
+    }
+   return err; 
+}
