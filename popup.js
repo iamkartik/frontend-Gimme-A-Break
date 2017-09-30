@@ -22,6 +22,8 @@ const repeat = document.querySelector('.switch input');
 const breakTime = document.querySelector('.break');
 // duration of the break selected
 const breakDuration = document.querySelector('#breakTime');
+// message to be displayed during break
+const message = document.querySelector('.message');
 // countdown button to set the setInterval for displaying countdown
 let countdown;
 
@@ -72,7 +74,14 @@ start.addEventListener('click',(e)=>{
             }else{
                 // set a repeated alarm
                 const breakTimeDuration = parseInt(breakDuration.value);
-                
+                chrome.runtime.sendMessage({value: timeInMin},function(response){
+                    calculateTime(response.finalTime);
+                    chrome.storage.sync.set({
+                        finalTime:response.finalTime,
+                        break:true,
+                        breakTime:breakTimeDuration,
+                        duration:timeInMin},()=>{ console.log('set');});
+                });
             }
                             
         }else{
@@ -94,7 +103,7 @@ clear.addEventListener('click',()=>{
     // clear alarms from chrome
     chrome.alarms.clearAll(function(alarm){});
     // remove final time from storage
-    chrome.storage.sync.remove(['finalTime'],(items)=>{});
+    chrome.storage.sync.remove(['finalTime','break','duration','breakTime'],(items)=>{});
     // clear the countdown interval that displays time remaining
     clearInterval(countdown);
     // display the form to enable setting the alarm again
@@ -120,9 +129,6 @@ function calculateTime(finalTime){
         if(secondsLeft<0){
             // clear the interval
             clearInterval(countdown);
-            // display form again and hide the timer 
-            form.style.display = 'block';
-            timer.style.display = 'none';
             // return to stop execution
             return;
         }
@@ -148,15 +154,20 @@ function displayTime(seconds){
 window.addEventListener('load',()=>{
     // check if final time is set in the storage
     // if stored that means there is already an alram set
-    // shoe the countdown
-    chrome.storage.sync.get(['finalTime'],(time)=>{
-        if(time.finalTime){
+    // show the countdown
+    chrome.storage.sync.get(['finalTime','isBreak','breakFinalTime'],(time)=>{
+        if(time.finalTime||time.isBreak){
             // remove the form from display
             form.style.display = 'none';
             // show the timer 
             timer.style.display = 'block';
-            // start calculating countdown from final time
-            calculateTime(time.finalTime);
+            // check if it is break or a regular alarm
+            if(time.isBreak){
+                message.style.display = 'block';
+                calculateTime(time.breakFinalTime)
+            }else{
+                calculateTime(time.finalTime);
+            }
         }else{
             // show the form and hide the timer
             form.style.display = 'block';
@@ -175,13 +186,35 @@ options.addEventListener('click',()=>{
     }
 });
 
-chrome.alarms.onAlarm.addListener((alarm)=>{
-    console.log(alarm);
-    /*chrome.runtime.sendMessage({value: 1},function(response){
-                    calculateTime(response.finalTime);
-                    chrome.storage.sync.set({finalTime:response.finalTime},()=>{});
-    });*/
-});
+/*chrome.alarms.onAlarm.addListener((alarm)=>{
+   // console.log(alarm);
+    
+    chrome.storage.sync.get(['break','duration','breakTime'],(time)=>{
+        if(time.break){
+            // calculate the break dration in milliseconds
+            // min *60 = sec *1000 = millisec
+            const breakDuration = time.breakTime * 60 * 1000;
+            // run the break timer before setting another alarm 
+            setTimeout(()=>{
+                    // remove break message
+                  //  message.style.display = 'none';
+                    chrome.runtime.sendMessage({value: time.duration },function(response){
+                        calculateTime(response.finalTime);
+                        chrome.storage.sync.set({finalTime:response.finalTime},()=>{console.log('oye oye')});
+                });          
+            },breakDuration);
+            // run the break timer 
+            // set up break message
+            //message.style.display = 'block';
+            const breakTimer = Date.now() + breakDuration;
+            calculateTime(breakTimer);
+        }else{
+            // display form again and hide the timer 
+            form.style.display = 'block';
+            timer.style.display = 'none';
+        }
+    });
+});*/
 
 repeat.addEventListener('click',function(){
     const toggleBreak = this.checked?'inline-flex':'none';

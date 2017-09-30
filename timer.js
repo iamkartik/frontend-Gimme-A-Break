@@ -18,7 +18,31 @@ chrome.runtime.onMessage.addListener((request,sender,sendResponse)=>{
 // on any alarm catch the event and display a custom or predefined message
 chrome.alarms.onAlarm.addListener(function(alarm){
     showMessage();
+    chrome.storage.sync.get(['break','duration','breakTime'],(time)=>{
+        if(time.break){
+            // calculate the break dration in milliseconds
+            // min *60 = sec *1000 = millisec
+            const breakDuration = time.breakTime * 60 * 1000;
+            // run the break timer before setting another alarm 
+            setTimeout(()=>{
+                        chrome.alarms.create('myalarm', {periodInMinutes:time.duration});
+                        chrome.alarms.get('myalarm',(alarm)=>{
+                            const finalTime=alarm.scheduledTime;
+                            chrome.storage.sync.set({isBreak:false,finalTime:finalTime},()=>{});
+                        });
+                          
+            },breakDuration);
+            // run the break timer 
+            // set up break message
+            //message.style.display = 'block';
+            const breakFinalTime = Date.now() + breakDuration;
+            chrome.storage.sync.set({isBreak:true,breakFinalTime:breakFinalTime},()=>{});
+            }else{
+            
+        }
+    });    
 });
+
 
 // show the desired message
 function showMessage(){
@@ -32,10 +56,7 @@ function showMessage(){
     chrome.alarms.clearAll(function(alarm){});
     // remove finalTime field from the storage
     chrome.storage.sync.remove(['finalTime'],(items)=>{});
-    /* chrome.alarms.get('myalarm',(alarm)=>{
-        const finalTime=alarm.scheduledTime;
-        chrome.storage.sync.set({finalTime:finalTime},()=>{});
-     });*/
+    
 }
 
 

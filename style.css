@@ -128,3 +128,8 @@ input:checked + .slider::before{
 .break{
     display: none;
 }
+.message{
+    font-size: 18px;
+    display: none;
+    content: 'You\'re on a break. Your break ends in';
+}
