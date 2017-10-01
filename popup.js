@@ -103,7 +103,7 @@ clear.addEventListener('click',()=>{
     // clear alarms from chrome
     chrome.alarms.clearAll(function(alarm){});
     // remove final time from storage
-    chrome.storage.sync.remove(['finalTime','break','duration','breakTime'],(items)=>{});
+    chrome.storage.sync.remove(['finalTime','break','duration','breakTime','isBreak','breakFinalTime'],(items)=>{});
     // clear the countdown interval that displays time remaining
     clearInterval(countdown);
     // display the form to enable setting the alarm again
@@ -129,6 +129,7 @@ function calculateTime(finalTime){
         if(secondsLeft<0){
             // clear the interval
             clearInterval(countdown);
+            window.location.reload();
             // return to stop execution
             return;
         }
@@ -164,6 +165,7 @@ window.addEventListener('load',()=>{
             // check if it is break or a regular alarm
             if(time.isBreak){
                 message.style.display = 'block';
+                message.innerHTML = 'Break!!';
                 calculateTime(time.breakFinalTime)
             }else{
                 calculateTime(time.finalTime);
