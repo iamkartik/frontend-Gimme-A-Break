@@ -5,7 +5,7 @@ body{
     align-items: center;
     min-height: 30vh;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    background: #4a4675;
+    background: #151b21;
     color: white;
     font-size: 22px;
 }
@@ -131,5 +131,11 @@ input:checked + .slider::before{
 .message{
     font-size: 18px;
     display: none;
-    content: 'You\'re on a break. Your break ends in';
+}
+.options{
+    min-width: 90vw;
+    min-height: 90vh;
+}
+input[type="textarea"]{
+    min-width: 400px;
 }

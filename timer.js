@@ -50,11 +50,23 @@ chrome.alarms.onAlarm.addListener(function(alarm){
 
 // show the desired message
 function showMessage(){
+    let messages=["Time to go on a break",
+              "It's coffee time",
+              "Get up and stretch out !!",
+              "Look to your left and right , now blink twice",
+              "Go grab a bite !"];
+    chrome.storage.sync.get(['messages'],(item)=>{
+        if(item.messages){
+           // console.log(item.messages);
+            messages.concat(item.messages.split(','));
+        }
+    });
+
     chrome.notifications.create('remind',{
         type: 'basic',
         iconUrl: 'icon_128.png',
         title: 'Gimme a Break !!!',
-        message: 'Time to take a break !!'
+        message: messages[Math.floor((Math.random() * (messages.length - 0 +1)) + 0)]
      },function(notificationId) {});
      // clear the alarms 
     chrome.alarms.clearAll(function(alarm){});
