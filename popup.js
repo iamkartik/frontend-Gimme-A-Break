@@ -165,7 +165,7 @@ window.addEventListener('load',()=>{
             // check if it is break or a regular alarm
             if(time.isBreak){
                 message.style.display = 'block';
-                message.innerHTML = 'Break!!';
+                message.innerHTML = 'You\'re on a break. Your break ends in:';
                 calculateTime(time.breakFinalTime)
             }else{
                 calculateTime(time.finalTime);

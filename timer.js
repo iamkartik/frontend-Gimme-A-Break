@@ -25,21 +25,25 @@ chrome.alarms.onAlarm.addListener(function(alarm){
             const breakDuration = time.breakTime * 60 * 1000;
             // run the break timer before setting another alarm 
             setTimeout(()=>{
-                        chrome.alarms.create('myalarm', {periodInMinutes:time.duration});
-                        chrome.alarms.get('myalarm',(alarm)=>{
-                            const finalTime=alarm.scheduledTime;
-                            chrome.storage.sync.set({isBreak:false,finalTime:finalTime},()=>{});
-                        });
-                          
+                // bug fix : during break if reset is clicked this alarm is set irrespective after the timeout
+                // reset is clearing the storage so checking again to confirm before setting the alarm
+                        chrome.storage.sync.get(['isBreak'],(alarm)=>{
+                            if(alarm.isBreak){
+                                chrome.alarms.create('myalarm', {periodInMinutes:time.duration});
+                                
+                                chrome.alarms.get('myalarm',(alarm)=>{
+                                const finalTime=alarm.scheduledTime;
+                                chrome.storage.sync.set({isBreak:false,finalTime:finalTime},()=>{});
+                                });
+                            }
+                        });                              
             },breakDuration);
             // run the break timer 
             // set up break message
             //message.style.display = 'block';
             const breakFinalTime = Date.now() + breakDuration;
             chrome.storage.sync.set({isBreak:true,breakFinalTime:breakFinalTime},()=>{});
-            }else{
-            
-        }
+            }
     });    
 });
 
