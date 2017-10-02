@@ -57,8 +57,7 @@ function showMessage(){
               "Go grab a bite !"];
     chrome.storage.sync.get(['messages'],(item)=>{
         if(item.messages){
-           // console.log(item.messages);
-            messages.concat(item.messages.split(','));
+            messages=item.messages.split(';');
         }
     });
 

@@ -102,7 +102,7 @@ clear.addEventListener('click',()=>{
     timer.style.display = 'none';
     // clear alarms from chrome
     chrome.alarms.clearAll(function(alarm){});
-    // remove final time from storage
+    // remove everything from storage
     chrome.storage.sync.remove(['finalTime','break','duration','breakTime','isBreak','breakFinalTime'],(items)=>{});
     // clear the countdown interval that displays time remaining
     clearInterval(countdown);
@@ -188,35 +188,6 @@ options.addEventListener('click',()=>{
     }
 });
 
-/*chrome.alarms.onAlarm.addListener((alarm)=>{
-   // console.log(alarm);
-    
-    chrome.storage.sync.get(['break','duration','breakTime'],(time)=>{
-        if(time.break){
-            // calculate the break dration in milliseconds
-            // min *60 = sec *1000 = millisec
-            const breakDuration = time.breakTime * 60 * 1000;
-            // run the break timer before setting another alarm 
-            setTimeout(()=>{
-                    // remove break message
-                  //  message.style.display = 'none';
-                    chrome.runtime.sendMessage({value: time.duration },function(response){
-                        calculateTime(response.finalTime);
-                        chrome.storage.sync.set({finalTime:response.finalTime},()=>{console.log('oye oye')});
-                });          
-            },breakDuration);
-            // run the break timer 
-            // set up break message
-            //message.style.display = 'block';
-            const breakTimer = Date.now() + breakDuration;
-            calculateTime(breakTimer);
-        }else{
-            // display form again and hide the timer 
-            form.style.display = 'block';
-            timer.style.display = 'none';
-        }
-    });
-});*/
 
 repeat.addEventListener('click',function(){
     const toggleBreak = this.checked?'inline-flex':'none';
